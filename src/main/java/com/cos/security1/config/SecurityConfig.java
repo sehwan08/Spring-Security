@@ -2,6 +2,7 @@ package com.cos.security1.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -9,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration //빈 등록
 @EnableWebSecurity//활성화 -> SecurityConfig가 스프링필터체인에 등록 됨
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Bean
@@ -26,6 +28,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.anyRequest().permitAll()
 			.and()
 			.formLogin()
+			.loginPage("/loginForm")
+			.loginProcessingUrl("/login")
+			.defaultSuccessUrl("/")
+			.and()
+			.oauth2Login()
 			.loginPage("/loginForm");
 	}
 }
