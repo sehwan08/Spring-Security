@@ -9,9 +9,15 @@ import javax.persistence.Id;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 public class User {
 	@Id
@@ -21,6 +27,8 @@ public class User {
 	private String password;
 	private String email;
 	private String role;
+	private String provider;
+	private String providerId;
 	@CreationTimestamp
 	private Timestamp createDate;
 }

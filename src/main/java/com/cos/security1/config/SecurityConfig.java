@@ -1,5 +1,6 @@
 package com.cos.security1.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -8,10 +9,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.cos.security1.config.oauth.PrincipalOauth2UserService;
+
 @Configuration //빈 등록
 @EnableWebSecurity//활성화 -> SecurityConfig가 스프링필터체인에 등록 됨
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
+	
+	@Autowired
+	private PrincipalOauth2UserService principalOauth2UserService;
 	
 	@Bean
 	public BCryptPasswordEncoder encodePwd() {
@@ -29,10 +35,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.and()
 			.formLogin()
 			.loginPage("/loginForm")
-			.loginProcessingUrl("/login")
+			.loginProcessingUrl("/login") //로그인 호출시 세큐리티가 낚아챔
 			.defaultSuccessUrl("/")
 			.and()
 			.oauth2Login()
-			.loginPage("/loginForm");
+			.loginPage("/loginForm")
+			.userInfoEndpoint()
+			.userService(principalOauth2UserService); // 후처리 필요
 	}
 }
